@@ -9,3 +9,4 @@ bash \
 pick \
 aspell \
 bash-completion \
+keepassxc \
