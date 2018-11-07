@@ -5,10 +5,10 @@
     username = SeanLeftBelow
 [alias]
     a = add --all
-  # https://github.com/rafaelrinaldi/til/blob/master/git/list-branches-by-date.md
+ # https://github.com/rafaelrinaldi/til/blob/master/git/list-branches-by-date.md
     branches = "!sh -c \"git checkout $(git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads | pick | cut -f2)\""
 [rerere]
     enabled = true
     autoupdate = true
 [core]
-        excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore
