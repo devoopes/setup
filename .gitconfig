@@ -1,7 +1,7 @@
 # https://gist.github.com/pksunkara/988716
 [user]
     name = Sean McCabe
-    email = sean.mccabe@canary.is
+    email = sean@ulation.com
     username = SeanLeftBelow
 [alias]
     a = add --all
@@ -10,3 +10,5 @@
 [rerere]
     enabled = true
     autoupdate = true
+[core]
+        excludesfile = ~/.gitignore
