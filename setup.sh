@@ -1,9 +1,11 @@
 #!/bin/bash
+#set -x
 //TODO: Makup: https://github.com/lra/mackup
 
 gpg_key="56F783EF1D171748"
-git_email="sean@ulation.com"
 git_dir="${HOME}/git"
+git_config_name="Sean McCabe"
+git_email="sean@ulation.com"
 github_user="SeanLeftBelow"
 github_org=    # Leave Empty to Skip.
 
@@ -23,69 +25,81 @@ atom=(
 )
 
 # Brew Setup
-echo "Installing xcode"
+printf "Installing xcode"
 xcode-select --install
-echo "Installing Homebrew"
+printf "Installing Homebrew"
 if test ! "$(which brew)"; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 brew update && brew upgrade
-brew cleanup && brew doctor
 brew bundle
 brew cleanup
 
 # SSH Setup
+echo "\n"
 echo -n "Create new SSH Key? (y/n)? "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-  gpg --keyserver hkp://pgp.mit.edu --recv ${gpg_key}
-  prompt "Export key to Github"
   ssh-keygen -t rsa -b 4096 -C ${git_email}
-  pbcopy < ~/.ssh/id_rsa.pub
-  open https://github.com/settings/ssh/new
 else
-  echo "Skipping ssh-keygen"
+  printf "Skipping ssh-keygen"
 fi
 
 # Git Setup
-echo "Git/Github Setup"
-cp {.gitconfig,.gitignore} ${HOME}/
+printf "Git/Github Setup"
+
+cat <<EOF > .gitconfig.temp
+[user]
+    name = $git_config_name
+    email = $git_email
+    username = $github_user
+    signingkey = $gpg_key
+EOF
+cat .gitconfig >> .gitconfig.temp
+
+printf "Copying .gitconfig and .gitignore to $HOME"
+cp {.gitconfig.temp,.gitignore} ${HOME}/
+rm .gitconfig.temp
 
 # Copy Git Repos:
 mkdir -p $git_dir/$github_user && (cd $git_dir/$github_user || exit;
 curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
 if [ -z "$github_org" ]
   then
-    echo "\$github_org is not set."
+    printf "\$github_org is not set."
   else
     mkdir $git_dir/$github_org && (cd $git_dir/$github_org || exit;
     curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
 fi
 
 # Setup VIM
-echo "VIM Setup"
-rsync -ah --progress  {.vimrc,.bash_profile} ${HOME}/
+printf "VIM Setup"
+
+printf "Copying ..vimrc and .bash_profile to $HOME"
+cp {.vimrc,.bash_profile} ${HOME}/
 
 # Setup Atom CLI
-echo "Atom Setup"
+printf "Atom Setup"
 ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom
 apm install "${atom[@]}"
 
 # Python:
-echo "Python3 Setup"
+printf "Python3 Setup"
 brew install python python3
 curl https://bootstrap.pypa.io/get-pip.py -o ~/Downloads/get-pip.py
 python ~/Downloads/get-pip.py --user
+rm ~/Downloads/get-pip.py
 
-pip install virtualenv virtualenvwrapper --user
-//TODO: Proper install for virtualenv on Python3.
+pip3 install virtualenv
 
 # Install Jupyter:
 python3 -m pip install jupyter
 
-echo "OSX Changes"
+printf "OSX Changes"
 # OSX Default Changes
+sudo chflags nohidden /Volumes # Show the /Volumes folder
+chflags nohidden ~/Library     # Show the ~/Library folder
 # Automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 # Disable 'natural' (Lion-style) scrolling
@@ -116,8 +130,6 @@ defaults write com.apple.finder ShowStatusBar -bool true            # Finder: Sh
 defaults write com.apple.finder ShowPathbar -bool true              # Finder: Show path bar
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true  # Finder: Display full POSIX path as window title
 defaults write com.apple.finder _FXSortFoldersFirst -bool true      # Finder: Keep folders on top when sorting by name
-chflags nohidden ~/Library     # Show the ~/Library folder
-sudo chflags nohidden /Volumes # Show the /Volumes folder
 # Avoid creating .DS_Store files on network or USB volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
@@ -140,4 +152,10 @@ defaults write org.m0k.transmission WarningDonate -bool false
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
 
-echo "Done!"
+printf "\n"
+printf "Be sure to add the new SSH key to github."
+printf "\n"
+cat ${HOME}/.ssh/id_rsa.pub
+printf "\n"
+
+printf "Done!"

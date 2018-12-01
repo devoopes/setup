@@ -1,20 +1,32 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
 # Brew Apps
-cask_args appdir: "/Applications"
   brew "aspell"
   brew "awscli"
-  brew "bash"
   brew "bash-completion"
-  brew "git"
+  brew "bash"
   brew "git-extras"
+  brew "git"
   brew "htop"
+  brew "httpie"
+  brew "jq"
+  brew "mas"
   brew "pandoc"
   brew "pick"
   brew "shellcheck"
+  brew "terraform"
   brew "tmux"
   brew "trash"
   brew "tree"
+  brew "unrar"
   brew "vim"
   brew "wget"
+  brew "youtube-dl"
+
+# Casks
+cask_args appdir: "/Applications"
   cask "atom"
   cask "cakebrew"
   cask "dropbox"
@@ -26,4 +38,10 @@ cask_args appdir: "/Applications"
   cask "slack"
   cask "steam"
   cask "transmission"
+  cask "tunnelblick"
   cask "vlc"
+
+# Mac App store (https://github.com/mas-cli/mas)
+  mas "Magnet", id: 441258766
+  mas "SomaFM", id: 449155338
+  mas "Textual", id: 896450579

@@ -1,3 +1,8 @@
+[user]
+    name = Sean McCabe
+    email = sean@ulation.com
+    username = SeanLeftBelow
+    signingkey = 56F783EF1D171748
 [alias]
     a = add --all
   # https://github.com/rafaelrinaldi/til/blob/master/git/list-branches-by-date.md
