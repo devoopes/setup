@@ -1,47 +1,66 @@
 #!/bin/bash
 
-#TODO: Makup: https://github.com/lra/mackup
 
+//TODO: Makup: https://github.com/lra/mackup
 
-#TODO: GPG Key
-#gpg_key=
-
-#Apps Installed via Brew Cask
-apps=(
-  dropbox
-  evernote
-  google-chrome
-  atom
-  steam
-  iterm2
-  vlc
-  transmission
-  keepassxc
-  cakebrew
-  gpgtools
-)
+gpg_key="56F783EF1D171748"
+git_email="sean@ulation.com"
+git_dir="~/git/"
+github_user="SeanLeftBelow"
+github_org=    # Leave Empty to Skip.
 
 # Brew Apps
 brew=(
-  tmux
-  git 
-  "vim --with-override-system-vi"
-  wget
-  bash
-  pick
   aspell
-  bash-completion
-  tree
-  trash
   awscli
+  bash
+  bash-completion
+  git
   git-extras
   htop
+  pandoc
+  pick
+  tmux
+  trash
+  tree
+  "vim --with-override-system-vi"
+  wget
+)
+
+#Apps Installed via Brew Cask
+apps=(
+  atom
+  cakebrew
+  dropbox
+  evernote
+  google-chrome
+  gpg-suite
+  iterm2
+  keepassxc
+  mactex
+  slack
+  steam
+  transmission
+  vlc
+)
+
+# Atom Packages
+atom=(
+  atom-clock
+  file-icons
+  language-hcl
+  language-markdown
+  language-shellscript
+  Markdown-Writer
+  pigments
+  sort-lines
+  split-diff
+  teletype
 )
 
 # Brew Setup
 echo "Installing xcode"
 xcode-select --install
-
 echo "Installing Homebrew"
 if test ! $(which brew); then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -50,23 +69,31 @@ fi
 brew update
 brew install caskroom/cask/brew-cask
 
-echo "Instlal Home Brew Packages"
-brew install  ${brew[@]}
+echo "Installing Homebrew Packages"
+brew install ${brew[@]}
 brew cleanup
 
+echo "Installing Applications"
 brew tap caskroom/versions
 brew cask install --appdir="/Applications" ${apps[@]}
 brew cask cleanup
 
 # SSH Setup
-echo "Create new SSH Key"
-gpg --keyserver hkp://pgp.mit.edu --recv ${gpg_key}
-prompt "Export key to Github"
-ssh-keygen -t rsa -b 4096 -C ${git_email}
-pbcopy < ~/.ssh/id_rsa.pub
-open https://github.com/settings/ssh/new
+echo -n "Create new SSH Key? (y/n)? "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  gpg --keyserver hkp://pgp.mit.edu --recv ${gpg_key}
+  prompt "Export key to Github"
+  ssh-keygen -t rsa -b 4096 -C ${git_email}
+  pbcopy < ~/.ssh/id_rsa.pub
+  open https://github.com/settings/ssh/new
+else
+  echo "Skipping ssh-keygen"
+fi
 
 # Git Setup
+echo "Git/Github Setup"
+//TODO: Git Configs
 echo "Git setup"
 prompt "Set git defaults"
 for config in "${git_configs[@]}"
@@ -74,15 +101,31 @@ do
   git config --global ${config}
 done
 
-cp .gitconfig ~/
-cp .gitignore ~/
+cp {.gitconfig,.gitignore} ~/
 
-echo "Vim setup"
-cp .vimrc ~/
+# Copy Git Repos:
+mkdir $gitdir
+    mkdir $github_user
+    curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone "$gitdir/$github_user/"
+if [ -z "$github_org" ]
+  then
+    echo "\$github_org is not set."
+  else
+    mkdir $github_org
+    curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone "$gitdir/$github_org/"
+fi
 
-cp .bash_profile ~/
+# Setup VIM
+echo "VIM Setup"
+cp {.vimrc,.bash_profile} ~/
 
-#Python:
+# Setup Atom CLI
+echo "Atom Setup"
+ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom
+apm install ${atom[@]}
+
+# Python:
+echo "Python3 Setup"
 brew install python python3
 curl https://bootstrap.pypa.io/get-pip.py -o ~/Downloads/get-pip.py
 python ~/Downloads/get-pip.py --user
@@ -90,8 +133,11 @@ python ~/Downloads/get-pip.py --user
 pip install virtualenv virtualenvwrapper --user
 source /Users/$USER/Library/Python/2.7/bin/virtualenvwrapper.sh
 
-cat ~/.virtualenvs/postactivate << EOF
+# Install Jupyter:
+python3 -m pip install jupyter
 
+# Updates requirements every virtualenv activate.
+cat ~/.virtualenvs/postactivate << EOF
 project_name=$(basename $VIRTUAL_ENV)
 GIT_REPOS="~/path/to/projects"
 cd ${GIT_REPOS}/$project_name
@@ -102,7 +148,8 @@ elif [[ -d requirements && -f requirements/development.txt ]]; then
 fi
 EOF
 
-# OSX Stuff
+echo "OSX Changes"
+# OSX Default Changes
 # Automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 # Disable 'natural' (Lion-style) scrolling
@@ -144,7 +191,7 @@ defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
 defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
 defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
-# Transmission Stuff
+# Transmission Configs
 # Use `~/Downloads/Incomplete` to store incomplete downloads
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
@@ -157,12 +204,4 @@ defaults write org.m0k.transmission WarningDonate -bool false
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
 
-
-
-
 echo "Done!"
-
-# Sources:
-#  https://gist.github.com/bradp/bea76b16d3325f5c47d4
-#  https://github.com/pathikrit/mac-setup-script/blob/master/install.sh
-#  https://github.com/donnemartin/dev-setup
