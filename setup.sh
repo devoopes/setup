@@ -1,48 +1,11 @@
 #!/bin/bash
-
-
 //TODO: Makup: https://github.com/lra/mackup
 
 gpg_key="56F783EF1D171748"
 git_email="sean@ulation.com"
-git_dir="~/git/"
+git_dir="${HOME}/git"
 github_user="SeanLeftBelow"
 github_org=    # Leave Empty to Skip.
-
-# Brew Apps
-brew=(
-  aspell
-  awscli
-  bash
-  bash-completion
-  git
-  git-extras
-  htop
-  pandoc
-  pick
-  tmux
-  trash
-  tree
-  "vim --with-override-system-vi"
-  wget
-)
-
-#Apps Installed via Brew Cask
-apps=(
-  atom
-  cakebrew
-  dropbox
-  evernote
-  google-chrome
-  gpg-suite
-  iterm2
-  keepassxc
-  mactex
-  slack
-  steam
-  transmission
-  vlc
-)
 
 # Atom Packages
 atom=(
@@ -50,7 +13,8 @@ atom=(
   file-icons
   language-hcl
   language-markdown
-  language-shellscript
+  linter
+  linter-shellcheck
   Markdown-Writer
   pigments
   sort-lines
@@ -62,21 +26,14 @@ atom=(
 echo "Installing xcode"
 xcode-select --install
 echo "Installing Homebrew"
-if test ! $(which brew); then
+if test ! "$(which brew)"; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-brew update
-brew install caskroom/cask/brew-cask
-
-echo "Installing Homebrew Packages"
-brew install ${brew[@]}
+brew update && brew upgrade
+brew cleanup && brew doctor
+brew bundle
 brew cleanup
-
-echo "Installing Applications"
-brew tap caskroom/versions
-brew cask install --appdir="/Applications" ${apps[@]}
-brew cask cleanup
 
 # SSH Setup
 echo -n "Create new SSH Key? (y/n)? "
@@ -93,36 +50,27 @@ fi
 
 # Git Setup
 echo "Git/Github Setup"
-//TODO: Git Configs
-echo "Git setup"
-prompt "Set git defaults"
-for config in "${git_configs[@]}"
-do
-  git config --global ${config}
-done
-
-cp {.gitconfig,.gitignore} ~/
+cp {.gitconfig,.gitignore} ${HOME}/
 
 # Copy Git Repos:
-mkdir $gitdir
-    mkdir $github_user
-    curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone "$gitdir/$github_user/"
+mkdir -p $git_dir/$github_user && (cd $git_dir/$github_user || exit;
+curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
 if [ -z "$github_org" ]
   then
     echo "\$github_org is not set."
   else
-    mkdir $github_org
-    curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone "$gitdir/$github_org/"
+    mkdir $git_dir/$github_org && (cd $git_dir/$github_org || exit;
+    curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
 fi
 
 # Setup VIM
 echo "VIM Setup"
-cp {.vimrc,.bash_profile} ~/
+rsync -ah --progress  {.vimrc,.bash_profile} ${HOME}/
 
 # Setup Atom CLI
 echo "Atom Setup"
 ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom
-apm install ${atom[@]}
+apm install "${atom[@]}"
 
 # Python:
 echo "Python3 Setup"
@@ -131,22 +79,10 @@ curl https://bootstrap.pypa.io/get-pip.py -o ~/Downloads/get-pip.py
 python ~/Downloads/get-pip.py --user
 
 pip install virtualenv virtualenvwrapper --user
-source /Users/$USER/Library/Python/2.7/bin/virtualenvwrapper.sh
+//TODO: Proper install for virtualenv on Python3.
 
 # Install Jupyter:
 python3 -m pip install jupyter
-
-# Updates requirements every virtualenv activate.
-cat ~/.virtualenvs/postactivate << EOF
-project_name=$(basename $VIRTUAL_ENV)
-GIT_REPOS="~/path/to/projects"
-cd ${GIT_REPOS}/$project_name
-if  [ -f requirements.txt ]; then
-    pip install -r requirements.txt
-elif [[ -d requirements && -f requirements/development.txt ]]; then
-    pip install -r requirements/development.txt
-fi
-EOF
 
 echo "OSX Changes"
 # OSX Default Changes
