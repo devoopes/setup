@@ -6,7 +6,8 @@ git_dir="${HOME}/git"
 git_config_name=""
 git_email=""
 github_user=""
-github_org=    # Leave Empty to Skip.```
+github_org=    # Leave Empty to Skip.
+```
 
 
 Lookup your GPG key: hkp://pgp.mit.edu
