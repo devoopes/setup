@@ -62,15 +62,24 @@ printf "Copying .gitconfig and .gitignore to $HOME"
 cp {.gitconfig.temp,.gitignore} ${HOME}/
 rm .gitconfig.temp
 
+printf "\n"
+printf "Be sure to add the new SSH key to github."
+printf "\n"
+cat ${HOME}/.ssh/id_rsa.pub
+printf "\n"
+
 # Copy Git Repos:
-mkdir -p $git_dir/$github_user && (cd $git_dir/$github_user || exit;
-curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
-if [ -z "$github_org" ]
-  then
-    printf "\$github_org is not set."
-  else
-    mkdir $git_dir/$github_org && (cd $git_dir/$github_org || exit;
-    curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
+printf "Would you like to clone all your GitHub repos to $git_dir/$github_user? New SSH key GitHub setup is required."
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  mkdir -p $git_dir/$github_user && (cd $git_dir/$github_user || exit;
+  curl "https://api.github.com/users/$github_user/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
+  if [ -z "$github_org" ]
+    then
+      printf "\$github_org is not set."
+    else
+      mkdir $git_dir/$github_org && (cd $git_dir/$github_org || exit;
+      curl "https://api.github.com/orgs/$github_org/repos?per_page=1000" | grep -o 'git@[^"]*' | xargs -L1 git clone)
+  fi
 fi
 
 # Setup VIM
@@ -151,11 +160,5 @@ defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
 defaults write org.m0k.transmission WarningDonate -bool false
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
-
-printf "\n"
-printf "Be sure to add the new SSH key to github."
-printf "\n"
-cat ${HOME}/.ssh/id_rsa.pub
-printf "\n"
 
 printf "Done!"
