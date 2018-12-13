@@ -2,7 +2,8 @@
 
 alias ll='ls -la'
 alias ~="cd ~"
-alias dsdel = "find . -name '.DS_Store' -type f -delete"
+alias dsdel="find . -name '.DS_Store' -type f -delete"
+alias pictures="rsync -avzh ~/Pictures/2018/ /Volumes/pictures/2018/"
 
 #extract:  Extract most know archives with one command
 extract () {
