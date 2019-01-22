@@ -9,21 +9,6 @@ git_email="sean@ulation.com"
 github_user="SeanLeftBelow"
 github_org=    # Leave Empty to Skip.
 
-# Atom Packages
-atom=(
-  atom-clock
-  file-icons
-  language-hcl
-  language-markdown
-  linter
-  linter-shellcheck
-  Markdown-Writer
-  pigments
-  sort-lines
-  split-diff
-  teletype
-)
-
 # Brew Setup
 printf "Installing xcode"
 xcode-select --install
@@ -91,7 +76,9 @@ cp {.vimrc,.bash_profile} ${HOME}/
 # Setup Atom CLI
 printf "Atom Setup"
 ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom
-apm install "${atom[@]}"
+apm install --packages-file ./atomfile
+# Gen current packages:
+# mv atomfile atomfile.old; apm list --installed --bare | grep '^[^@]\+' -o > atomfile
 
 # Python:
 printf "Python3 Setup"
