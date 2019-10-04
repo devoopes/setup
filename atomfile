@@ -3,7 +3,9 @@ atom-latex
 busy-signal
 file-icons
 intentions
+language-yaml-cloudformation
 language-hcl
+language-powershell
 language-markdown
 language-shellscript
 linter
