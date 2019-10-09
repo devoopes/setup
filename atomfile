@@ -3,10 +3,15 @@ atom-latex
 busy-signal
 file-icons
 intentions
-language-yaml-cloudformation
+language-docker
 language-hcl
 language-powershell
 language-markdown
+<<<<<<< HEAD
+=======
+language-shellscript
+language-yaml-cloudformation
+>>>>>>> 3f05c08f5b4e16f2e7fc0031dc095e67fe654eb7
 linter
 linter-shellcheck
 linter-ui-default
