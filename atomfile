@@ -6,6 +6,7 @@ intentions
 language-hcl
 language-markdown
 language-shellscript
+language-terraform
 linter
 linter-shellcheck
 linter-ui-default
