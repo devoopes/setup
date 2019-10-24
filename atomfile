@@ -1,11 +1,12 @@
 atom-clock
 atom-latex
 busy-signal
+docker
 file-icons
 intentions
+language-docker
 language-hcl
 language-markdown
-language-shellscript
 language-terraform
 linter
 linter-shellcheck
