@@ -30,7 +30,7 @@ tap "caskformula/caskformula"
   brew "imagemagick"
   brew "lua"
   brew "nmap"
-  brew "weikengchen/caskformula/inkscape"
+  brew "inkscape"
 
 # Casks
 cask_args appdir: "/Applications"
