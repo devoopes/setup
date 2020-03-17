@@ -17,6 +17,7 @@ tap "caskformula/caskformula"
   brew "mas"
   brew "pandoc"
   brew "pick"
+  brew "rename"
   brew "shellcheck"
   brew "terraform"
   brew "tmux"
@@ -30,7 +31,6 @@ tap "caskformula/caskformula"
   brew "imagemagick"
   brew "lua"
   brew "nmap"
-  brew "inkscape"
 
 # Casks
 cask_args appdir: "/Applications"
@@ -43,6 +43,7 @@ cask_args appdir: "/Applications"
   cask "gpg-suite"
   cask "iterm2"
   cask "keepassxc"
+  cask "mathpix-snipping-tool" #OCR math equasions to LaTeX
   cask "slack"
   cask "steam"
   cask "transmission"
@@ -50,7 +51,7 @@ cask_args appdir: "/Applications"
   cask "vlc"
 
 
-# Mac App store (https://github.com/mas-cli/mas)
+# Mac App store (https://github.com/mas-cli/mas) Query installed with `mas list`
   mas "Magnet", id: 441258766
   mas "SomaFM", id: 449155338
   mas "Textual", id: 896450579
