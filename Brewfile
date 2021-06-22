@@ -37,6 +37,7 @@ cask_args appdir: "/Applications"
   cask "atom"
   cask "cakebrew"
   cask "dropbox"
+  cask "docker"
   cask "evernote"
   cask "flux"
   cask "google-chrome"
@@ -44,13 +45,14 @@ cask_args appdir: "/Applications"
   cask "iterm2"
   cask "keepassxc"
   cask "slack"
-  cask "steam"
   cask "transmission"
   cask "tunnelblick"
   cask "vlc"
 
 
 # Mac App store (https://github.com/mas-cli/mas)
+  mas "Cyberduck", id: 409222199
   mas "Magnet", id: 441258766
+  mas "Microsoft Remote Desktop", id: 715768417
   mas "SomaFM", id: 449155338
   mas "Textual", id: 896450579

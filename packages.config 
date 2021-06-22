@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <packages>
+      <package id="atom" />
+      <package id="docker-cli" />
+      <package id="dropbox" />
+      <package id="evernote" />
+      <package id="git" />
+      <package id="GoogleChrome" />
+      <package id="keepassxc" />
+      <package id="openvpn" />
+      <package id="slack" />
+      <package id="vlc" />
+    </packages>

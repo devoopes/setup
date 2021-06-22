@@ -6,8 +6,10 @@ file-icons
 intentions
 language-docker
 language-hcl
+language-powershell
 language-markdown
 language-terraform
+language-yaml-cloudformation
 linter
 linter-shellcheck
 linter-ui-default

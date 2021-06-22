@@ -5,6 +5,11 @@ alias ~="cd ~"
 alias dsdel="find . -name '.DS_Store' -type f -delete"
 alias pictures="rsync -avzh ~/Pictures/2018/ /Volumes/pictures/2018/"
 
+alias rm="rm -iv"
+alias ls="ls -F --color"
+alias bye="clear; exit"
+alias countryroad="cd ~"
+
 #extract:  Extract most know archives with one command
 extract () {
         if [ -f $1 ] ; then
