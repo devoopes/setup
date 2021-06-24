@@ -1,0 +1,5 @@
+
+# https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-without-cli.html
+Host git-codecommit.*.amazonaws.com
+User Your-SSH-Key-ID
+IdentityFile ~/.ssh/id_rsa

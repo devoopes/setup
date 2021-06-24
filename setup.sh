@@ -13,9 +13,7 @@ github_org=    # Leave Empty to Skip.
 printf "Installing xcode"
 xcode-select --install
 printf "Installing Homebrew"
-if test ! "$(which brew)"; then
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 brew update && brew upgrade
 brew bundle
@@ -95,6 +93,7 @@ python3 -m pip install jupyter
 printf "OSX Changes"
 # OSX Default Changes
 sudo chflags nohidden /Volumes # Show the /Volumes folder
+sudo defaults write /Library/Preferences/.GlobalPreferences.plist _HIEnableThemeSwitchHotKey -bool true #Enable Dark Mode
 chflags nohidden ~/Library     # Show the ~/Library folder
 # Automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
