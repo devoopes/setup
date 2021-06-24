@@ -24,7 +24,8 @@ echo "\n"
 echo -n "Create new SSH Key? (y/n)? "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-  ssh-keygen -t rsa -b 4096 -C ${git_email}
+  #ssh-keygen -t rsa -b 4096 -C ${git_email}
+  ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed25519 -C ${git_email}
 else
   printf "Skipping ssh-keygen"
 fi
