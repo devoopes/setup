@@ -9,6 +9,7 @@ alias rm="rm -iv"
 alias ls="ls -F --color"
 alias bye="clear; exit"
 alias countryroad="cd ~"
+alias unrar="unar"
 
 #extract:  Extract most know archives with one command
 extract () {
