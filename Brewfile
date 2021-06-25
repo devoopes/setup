@@ -39,7 +39,6 @@ cask_args appdir: "/Applications"
   cask "docker"
   cask "evernote"
   cask "flux"
-  cask "inkscape"
   cask "google-chrome"
   cask "gpg-suite"
   cask "iterm2"
@@ -49,7 +48,6 @@ cask_args appdir: "/Applications"
   cask "transmission"
   cask "tunnelblick"
   cask "vlc"
-  cask "xquartz"
 
 
 # Mac App store (https://github.com/mas-cli/mas)
