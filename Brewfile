@@ -5,8 +5,6 @@ tap "homebrew/core"
 # Brew Apps
   brew "aspell"
   brew "awscli"
-  brew "bash-completion"
-  brew "bash"
   brew "git-extras"
   brew "git"
   brew "htop"

@@ -10,14 +10,29 @@ github_user="SeanLeftBelow"
 github_org=    # Leave Empty to Skip.
 
 # Brew Setup
-printf "Installing xcode"
-xcode-select --install
-printf "Installing Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo -n "Install Homebrew? (y/n)? "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  printf "Installing xcode"
+  xcode-select --install
+  printf "Installing Homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  printf "Skipping Homebrew"
+fi
 
 brew update && brew upgrade
 brew bundle
 brew cleanup
+
+# Oh my ZSH
+echo -n "Install Oh My ZSH shell? (y/n)? "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  printf "Skipping Homebrew"
+fi
 
 # SSH Setup
 echo "\n"
