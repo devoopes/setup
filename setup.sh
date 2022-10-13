@@ -7,7 +7,7 @@ git_dir="${HOME}/git"
 git_config_name="Sean McCabe"
 git_email="sean@ulation.com"
 github_user="SeanLeftBelow"
-github_org=    # Leave Empty to Skip.
+github_org=  # Leave Empty to Skip.
 
 # Brew Setup
 echo -n "Install Homebrew? (y/n)? "
@@ -31,7 +31,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
-  printf "Skipping Homebrew"
+  printf "Skipping Zsh"
 fi
 
 # SSH Setup
@@ -41,6 +41,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   #ssh-keygen -t rsa -b 4096 -C ${git_email}
   ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed25519 -C ${git_email}
+  cat ./ssh/id_ed25519.pub >> ssh.pub
 else
   printf "Skipping ssh-keygen"
 fi
@@ -61,8 +62,12 @@ printf "Copying .gitconfig and .gitignore to $HOME"
 cp {.gitconfig.temp,.gitignore} ${HOME}/
 rm .gitconfig.temp
 
+echo -n "Add the new SSH key to github."
+gh ssh-key add key-file
+gh ssh-key add key-file --title "personal laptop"
+gh ssh-key add ~/.ssh/id_ed25519.pub
+
 printf "\n"
-printf "Be sure to add the new SSH key to github."
 printf "\n"
 cat ${HOME}/.ssh/id_rsa.pub
 printf "\n"
